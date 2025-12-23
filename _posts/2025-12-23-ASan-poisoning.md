@@ -1,14 +1,14 @@
 ---
 title: "Analyzing github Pulls. What is Asan poisoning?"
-date: 2025-12-23 12:00:00 +/-TTTT # e.g., 2025-12-23 10:00:00 +0000
-categories: [QA, Open-Source] # Optional, for organizing posts
-tags: [white-box, testing, software, QA, coding, programming, debugging, source, code, github, analysis] # Optional, for tags
-pin: true
+date: 2025-12-23 12:00:00
+categories: [QA, Open-Source]
+tags: [white-box, testing, software, QA, coding, programming, debugging, source, code, github, analysis]
 ---
 I was looking at the closed pull requests of a project I am analyzing (here is the github link for the [issue](https://github.com/facebook/zstd/pull/3451)) when I saw this change in the code and couldn't figure out what it is at first, so I decided to dive deeper to learn more about it. 
 
 Original:
-```C
+
+```c
 
 if (alloc) {
 	alloc = (BYTE *)alloc + ZSTD_CWKSP_ASAN_REDZONE_SIZE;
@@ -21,7 +21,8 @@ if (alloc) {
 ```
 
 Changed:
-```C
+
+```c
 
 if (alloc) {
 alloc = (BYTE *)alloc + ZSTD_CWKSP_ASAN_REDZONE_SIZE;
