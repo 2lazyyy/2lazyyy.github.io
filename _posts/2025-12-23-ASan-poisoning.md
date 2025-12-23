@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Analyzing github Pulls. What is Asan poisoning?"
 date: 2025-12-23 12:00:00 +/-TTTT # e.g., 2025-12-23 10:00:00 +0000
 categories: [QA, Open-Source] # Optional, for organizing posts
