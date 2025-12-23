@@ -125,5 +125,5 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 From this we can understand that we detected a use-after-poison error, primarily caused because the use of the `new` function.
 The invalid access occurred at address `0x79c2753e0024`, which corresponds to `data[5]`, located within the poisoned memory region `[0x79c2753e0024, 0x79c2753e0038)`.
 #### Resources I have read in the making of this blog post:
-- https://can-ozkan.medium.com/detecting-c-and-c-memory-bugs-with-addresssanitizer-asan-84a9354716b7
-- https://stackoverflow.com/questions/63107632/how-to-use-poisoning-function-of-address-sanitizer-with-asan-poison-memory-regio
+- [Detecting C/C++ memory bugs with ASan](https://can-ozkan.medium.com/detecting-c-and-c-memory-bugs-with-addresssanitizer-asan-84a9354716b7)
+- [How to use ASAN_POISON_MEMORY_REGION](https://stackoverflow.com/questions/63107632/how-to-use-poisoning-function-of-address-sanitizer-with-asan-poison-memory-regio)
