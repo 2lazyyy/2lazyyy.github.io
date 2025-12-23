@@ -10,13 +10,15 @@ Original:
 
 ```c
 
-if (alloc) {
+int main(){
+  if (alloc) {
 	alloc = (BYTE *)alloc + ZSTD_CWKSP_ASAN_REDZONE_SIZE;
 	if (ws->isStatic == ZSTD_cwksp_dynamic_alloc) {
 		__asan_unpoison_memory_region(alloc, bytes); 
 	}
 }
 #endif
+}
 
 ```
 
@@ -24,7 +26,8 @@ Changed:
 
 ```c
 
-if (alloc) {
+int main(){
+  if (alloc) {
 alloc = (BYTE *)alloc + ZSTD_CWKSP_ASAN_REDZONE_SIZE;
 
 	if (ws->isStatic == ZSTD_cwksp_dynamic_alloc) {
@@ -32,6 +35,7 @@ alloc = (BYTE *)alloc + ZSTD_CWKSP_ASAN_REDZONE_SIZE;
 	}
 }
 #endif
+}
 
 ```
 
