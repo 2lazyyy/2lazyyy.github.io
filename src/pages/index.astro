@@ -5,8 +5,7 @@ import BaseLayout from "../layouts/Base.astro";
 
 const posts = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
-  .sort((first, second) => second.data.pubDate.valueOf() - first.data.pubDate.valueOf())
-  .slice(0, 3);
+	.sort((first, second) => second.data.pubDate.valueOf() - first.data.pubDate.valueOf());
 
 const formatDate = (date: Date) =>
   [date.getDate(), date.getMonth() + 1, date.getFullYear()]
@@ -30,7 +29,9 @@ const formatDate = (date: Date) =>
 				<button type="submit">Post comment</button>
 			</form>
 			<p id="comment-status" class="comment-note" role="status"></p>
-			<ul id="comment-list" class="comment-list" aria-live="polite"></ul>
+			<p class="messages-link-note">
+				Messages available under the <a href="/messages">messages</a> link on the footer.
+			</p>
 		</section>
 	</div>
 
@@ -57,41 +58,7 @@ const formatDate = (date: Date) =>
 		import.meta.env.PUBLIC_SUPABASE_ANON_KEY,
 	);
 	const form = document.querySelector<HTMLFormElement>("#comment-form");
-	const commentList = document.querySelector<HTMLUListElement>("#comment-list");
 	const commentStatus = document.querySelector<HTMLParagraphElement>("#comment-status");
-
-	const renderComments = (comments: { name: string; message: string; created_at: string }[]) => {
-		if (!commentList) return;
-		commentList.replaceChildren();
-
-		for (const comment of comments) {
-			const item = document.createElement("li");
-			const author = document.createElement("strong");
-			const message = document.createElement("p");
-			const date = document.createElement("time");
-
-			author.textContent = comment.name;
-			message.textContent = comment.message;
-			date.textContent = new Date(comment.created_at).toLocaleString();
-			date.dateTime = comment.created_at;
-			item.append(author, date, message);
-			commentList.append(item);
-		}
-	};
-
-	const loadComments = async () => {
-		const { data, error } = await supabase
-			.from("comments")
-			.select("name, message, created_at")
-			.order("created_at", { ascending: false });
-
-		if (error) {
-			if (commentStatus) commentStatus.textContent = "Could not load comments.";
-			return;
-		}
-
-		renderComments(data ?? []);
-	};
 
 	form?.addEventListener("submit", async (event) => {
 		event.preventDefault();
@@ -113,8 +80,5 @@ const formatDate = (date: Date) =>
 
 		form.reset();
 		if (commentStatus) commentStatus.textContent = "Comment posted.";
-		await loadComments();
 	});
-
-	loadComments();
 </script>

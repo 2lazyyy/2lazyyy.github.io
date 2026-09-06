@@ -81,11 +81,13 @@ body::before {
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
-  gap: 0.75rem;
+  column-gap: 0.75rem;
+  row-gap: 0;
 }
 
 .page-container:has(> .recent-posts) > .site-header {
   flex: 0 0 calc(100% - 1.5rem);
+  margin-bottom: 0;
 }
 
 .about-column {
@@ -93,7 +95,7 @@ body::before {
   flex: 0 0 400px;
   align-self: flex-start;
   height: auto;
-  margin: 70px 15px 0 0;
+  margin: 8px 15px 0 0;
 }
 
 .about-column .window {
@@ -104,12 +106,14 @@ body::before {
 .recent-posts {
   order: 1;
   flex: 1 1 0;
-  margin: 70px 0 0 0.75rem;
+  margin: 8px 0 0 0.75rem;
   padding: 0.75rem;
   background: #999a90;
   border: 2px inset #bdbdbd;
   color: #111;
   height: 700px;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .comment-box {
@@ -118,6 +122,20 @@ body::before {
   border: 2px inset #bdbdbd;
   background: #999a90;
   color: #111;
+}
+
+.messages-page {
+  width: min(100% - 2rem, 52rem);
+  margin: 4rem auto 0;
+}
+
+.messages-page .comment-box {
+  margin-top: 0;
+}
+
+.messages-page h1 {
+  margin: 0;
+  font-size: 1.25rem;
 }
 
 .comment-box h2 {
@@ -154,6 +172,19 @@ body::before {
 .comment-note {
   margin: 0.75rem 0 0;
   font-size: 0.8rem;
+}
+
+.messages-link-note {
+  margin: 0.75rem 0 0;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.messages-link-note a {
+  font-size: 1.1em;
+  font-style: italic;
+  font-weight: 700;
+  text-decoration: underline;
 }
 
 #comment-form button:disabled {
