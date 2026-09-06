@@ -1,0 +1,71 @@
+---
+import BaseLayout from "./Base.astro";
+
+const { post } = Astro.props;
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  category,
+  tags,
+  author,
+} = post.data;
+
+const readingTime = Math.max(
+  1,
+  Math.ceil(post.body.split(/\s+/).length / 200)
+);
+---
+
+<BaseLayout
+  title={`${title} | 2lazy`}
+  description={description}
+>
+  <div class="mx-auto max-w-6xl px-6 py-16">
+
+    <article>
+      <header class="mb-12">
+      <div class="mb-4 flex flex-wrap gap-2">
+        <a href={`/${encodeURIComponent(category.toLowerCase())}`}>
+          {category}
+        </a>
+
+        {
+          tags.map((tag: string) => (
+            <a href={`/tag/${encodeURIComponent(tag.toLowerCase())}`}>
+              #{tag}
+            </a>
+          ))
+        }
+      </div>
+
+      <h1 class="text-4xl font-bold tracking-tight md:text-5xl">
+        {title}
+      </h1>
+
+      <p class="mt-4 text-lg text-[var(--muted)]">
+        {description}
+      </p>
+
+      <div class="mt-6 text-sm text-[var(--muted)]">
+        {pubDate.toLocaleDateString()} · {readingTime} min read ·
+        {author}
+      </div>
+
+      {
+        updatedDate && (
+          <div class="mt-2 text-sm text-[var(--muted)]">
+            Updated {updatedDate.toLocaleDateString()}
+          </div>
+        )
+      }
+      </header>
+
+      <div class="prose prose-lg max-w-none">
+        <slot />
+      </div>
+    </article>
+  </div>
+</BaseLayout>

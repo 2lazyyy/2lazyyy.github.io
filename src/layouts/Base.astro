@@ -1,0 +1,75 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonical?: string;
+}
+
+const {
+  title = "2lazy's Cyber blog!!",
+  description = "Cybersecurity, programming, Linux and homelabbing.",
+  image = "/photo_2026-09-06_14-19-59.jpg",
+  canonical,
+} = Astro.props;
+
+const site = "https://2lazyhotline.me/";
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, site).href;
+const imageUrl = new URL(image, site).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+
+    <title>{title}</title>
+
+    <meta name="description" content={description} />
+
+    <link rel="icon" type="image/jpeg" href="/photo_2026-09-06_14-19-59.jpg" />
+
+    <link rel="canonical" href={canonicalUrl} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={imageUrl} />
+
+    <meta name="theme-color" content="#a8a8a8" />
+
+    <link rel="alternate" type="application/rss+xml"
+      title="2lazy RSS Feed"
+      href="/rss.xml"
+    />
+  </head>
+
+  <body>
+    <img
+      class="corner-character corner-character-left"
+      src="/anime-friends-manga-black-and-white-illyasviel-von-einzbern-black-girl-7c2ed5b17744d176978d81a21768cffa.png"
+      alt=""
+      aria-hidden="true"
+    />
+    <img
+      class="corner-character corner-character-right"
+      src="/anime-manga-sword-girls-randeer-4c3dc880e69fc3e3c3d4435495f646fe.png"
+      alt=""
+      aria-hidden="true"
+    />
+
+    <div class="page-container">
+      <Header />
+      <slot />
+    </div>
+  </body>
+</html>

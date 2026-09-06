@@ -1,0 +1,36 @@
+---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "../layouts/Base.astro";
+
+const posts: CollectionEntry<"blog">[] = await getCollection("blog");
+const categories = [...new Set(posts.map((post) => post.data.category))].sort();
+---
+
+<BaseLayout title="Categories | 2lazy" description="Browse posts by category.">
+  <main class="category-browser">
+    <h1 class="text-4xl font-bold">Categories</h1>
+    <div class="category-tree" aria-label="Post categories">
+      {categories.map((category) => (
+        <details>
+          <summary>
+            <span class="folder-icon" aria-hidden="true">📁</span>
+            <strong>{category}</strong>
+          </summary>
+          <ul>
+            {posts
+              .filter((post) => post.data.category === category)
+              .map((post) => (
+                <li>
+                  <a href={`/posts/${post.id}`}>
+                    <span aria-hidden="true">📄</span>
+                    {post.data.title}
+                  </a>
+                </li>
+              ))}
+          </ul>
+        </details>
+      ))}
+    </div>
+  </main>
+</BaseLayout>

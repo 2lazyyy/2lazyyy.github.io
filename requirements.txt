@@ -1,0 +1,11 @@
+# Informational npm dependency list.
+# npm installs from package.json and package-lock.json.
+# Run: npm install
+
+# Runtime dependencies
+astro@^7.2.10
+@supabase/supabase-js@^2.115.0
+@tailwindcss/vite@^4.3.3
+
+# Build-time dependencies
+pagefind@^1.5.2

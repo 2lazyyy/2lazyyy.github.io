@@ -1,0 +1,52 @@
+---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "../layouts/Base.astro";
+
+export async function getStaticPaths() {
+  const posts: CollectionEntry<"blog">[] = await getCollection("blog");
+  const categories = [
+    ...new Set(posts.map((post) => post.data.category)),
+  ];
+
+  return categories.map((category) => ({
+    params: { category: category.toLowerCase() },
+    props: {
+      category,
+      posts: posts.filter((post) => post.data.category === category),
+    },
+  }));
+}
+
+const { category, posts } = Astro.props as {
+  category: string;
+  posts: CollectionEntry<"blog">[];
+};
+---
+
+<BaseLayout
+  title={`${category} | 2lazy`}
+  description={`Articles about ${category}.`}
+>
+  <main class="mx-auto max-w-6xl px-6 py-16">
+    <h1 class="text-4xl font-bold">{category}</h1>
+    <div class="category-tree" aria-label={category}>
+      <details>
+        <summary>
+          <span class="folder-icon" aria-hidden="true">📁</span>
+          <strong>{category}</strong>
+        </summary>
+        <ul>
+          {posts.map((post) => (
+            <li>
+              <a href={`/posts/${post.id}`}>
+                <span aria-hidden="true">📄</span>
+                {post.data.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+    </div>
+  </main>
+</BaseLayout>

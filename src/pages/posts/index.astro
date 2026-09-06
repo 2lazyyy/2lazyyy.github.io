@@ -1,0 +1,50 @@
+---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/Base.astro";
+
+const posts: CollectionEntry<"blog">[] = (await getCollection("blog"))
+  .filter((post) => !post.data.draft)
+  .sort((first, second) => second.data.pubDate.valueOf() - first.data.pubDate.valueOf());
+const postsPerPage = 10;
+const totalPages = Math.max(1, Math.ceil(posts.length / postsPerPage));
+const requestedPage = Number.parseInt(Astro.url.searchParams.get("page") ?? "1", 10);
+const currentPage = Math.min(Math.max(Number.isNaN(requestedPage) ? 1 : requestedPage, 1), totalPages);
+const pagePosts = posts.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
+
+const formatDate = (date: Date) =>
+  [date.getDate(), date.getMonth() + 1, date.getFullYear()]
+    .map((part) => String(part).padStart(2, "0"))
+    .join("-");
+---
+
+<BaseLayout title="Blog | 2lazy" description="All 2lazy blog posts.">
+  <main class="posts-archive">
+    <h1>Recent posts</h1>
+    <ul class="recent-posts-list">
+      {pagePosts.map((post) => (
+        <li>
+          <a href={`/posts/${post.id}`}>{post.data.title}</a>
+          <time datetime={post.data.pubDate.toISOString()}>
+            {formatDate(post.data.pubDate)}
+          </time>
+        </li>
+      ))}
+    </ul>
+    <nav class="posts-pagination" aria-label="Posts pagination">
+      <a
+        href={`/posts?page=${currentPage - 1}`}
+        aria-label="Previous page"
+        aria-disabled={currentPage === 1}
+        class:list-disabled={currentPage === 1}
+      >&lt;</a>
+      <span>{currentPage} of {totalPages}</span>
+      <a
+        href={`/posts?page=${currentPage + 1}`}
+        aria-label="Next page"
+        aria-disabled={currentPage === totalPages}
+        class:list-disabled={currentPage === totalPages}
+      >&gt;</a>
+    </nav>
+  </main>
+</BaseLayout>

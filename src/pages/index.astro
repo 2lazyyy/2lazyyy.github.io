@@ -1,0 +1,120 @@
+---
+import { getCollection } from "astro:content";
+import About from "../components/about.astro";
+import BaseLayout from "../layouts/Base.astro";
+
+const posts = (await getCollection("blog"))
+  .filter((post) => !post.data.draft)
+  .sort((first, second) => second.data.pubDate.valueOf() - first.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const formatDate = (date: Date) =>
+  [date.getDate(), date.getMonth() + 1, date.getFullYear()]
+    .map((part) => String(part).padStart(2, "0"))
+    .join("-");
+---
+
+<BaseLayout>
+	<div class="about-column">
+		<About />
+
+		<section class="comment-box" aria-labelledby="comments-title">
+			<h2 id="comments-title">Leave a comment</h2>
+			<form id="comment-form">
+				<label for="comment-name">Name</label>
+				<input id="comment-name" name="name" type="text" maxlength="40" required />
+
+				<label for="comment-message">Comment</label>
+				<textarea id="comment-message" name="message" maxlength="500" rows="4" required></textarea>
+
+				<button type="submit">Post comment</button>
+			</form>
+			<p id="comment-status" class="comment-note" role="status"></p>
+			<ul id="comment-list" class="comment-list" aria-live="polite"></ul>
+		</section>
+	</div>
+
+	<section class="recent-posts" aria-labelledby="recent-posts-title">
+		<h2 id="recent-posts-title">Recent posts</h2>
+		<ul>
+			{posts.map((post) => (
+				<li>
+					<a href={`/posts/${post.id}`}>{post.data.title}</a>
+					<time datetime={post.data.pubDate.toISOString()}>
+						{formatDate(post.data.pubDate)}
+					</time>
+				</li>
+			))}
+		</ul>
+	</section>
+</BaseLayout>
+
+<script>
+	import { createClient } from "@supabase/supabase-js";
+
+	const supabase = createClient(
+		import.meta.env.PUBLIC_SUPABASE_URL,
+		import.meta.env.PUBLIC_SUPABASE_ANON_KEY,
+	);
+	const form = document.querySelector<HTMLFormElement>("#comment-form");
+	const commentList = document.querySelector<HTMLUListElement>("#comment-list");
+	const commentStatus = document.querySelector<HTMLParagraphElement>("#comment-status");
+
+	const renderComments = (comments: { name: string; message: string; created_at: string }[]) => {
+		if (!commentList) return;
+		commentList.replaceChildren();
+
+		for (const comment of comments) {
+			const item = document.createElement("li");
+			const author = document.createElement("strong");
+			const message = document.createElement("p");
+			const date = document.createElement("time");
+
+			author.textContent = comment.name;
+			message.textContent = comment.message;
+			date.textContent = new Date(comment.created_at).toLocaleString();
+			date.dateTime = comment.created_at;
+			item.append(author, date, message);
+			commentList.append(item);
+		}
+	};
+
+	const loadComments = async () => {
+		const { data, error } = await supabase
+			.from("comments")
+			.select("name, message, created_at")
+			.order("created_at", { ascending: false });
+
+		if (error) {
+			if (commentStatus) commentStatus.textContent = "Could not load comments.";
+			return;
+		}
+
+		renderComments(data ?? []);
+	};
+
+	form?.addEventListener("submit", async (event) => {
+		event.preventDefault();
+		if (commentStatus) commentStatus.textContent = "Posting...";
+		const submitButton = form.querySelector<HTMLButtonElement>("button[type=submit]");
+		if (submitButton) submitButton.disabled = true;
+
+		const formData = new FormData(form);
+		const { error } = await supabase.from("comments").insert({
+			name: String(formData.get("name")).trim(),
+			message: String(formData.get("message")).trim(),
+		});
+
+		if (submitButton) submitButton.disabled = false;
+		if (error) {
+			if (commentStatus) commentStatus.textContent = "Could not post comment.";
+			return;
+		}
+
+		form.reset();
+		if (commentStatus) commentStatus.textContent = "Comment posted.";
+		await loadComments();
+	});
+
+	loadComments();
+</script>
