@@ -495,6 +495,25 @@ body::before {
   text-decoration: underline;
 }
 
+.refresh-button {
+  flex: 0 0 auto;
+  padding: 0.25rem 0.55rem;
+  border: 2px outset #d6d6d6;
+  background: #c0c0c0;
+  color: #111;
+  font: inherit;
+  cursor: pointer;
+}
+
+.refresh-button:hover,
+.refresh-button:focus-visible {
+  background: #d6d6d6;
+}
+
+.refresh-button:active {
+  border-style: inset;
+}
+
 .header-gif-space {
   flex: 1 1 auto;
   display: grid;

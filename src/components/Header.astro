@@ -10,6 +10,10 @@
             <a href="/messages">Messages</a>
         </nav>
 
+        <button class="refresh-button" type="button" aria-label="Refresh and clear cached content">
+            Refresh
+        </button>
+
         <div class="header-gif-space">
             <img src="/gifs/debian.gif" alt="Debian" />
             <img src="/gifs/hl.gif" alt="Half-Life" />
@@ -35,3 +39,34 @@
         </div>
     </div>
 </header>
+
+<script>
+    const refreshButton = document.querySelector<HTMLButtonElement>(".refresh-button");
+
+    refreshButton?.addEventListener("click", async () => {
+        if ("caches" in window) {
+            await Promise.all(
+                (await caches.keys()).map((cacheName) => caches.delete(cacheName))
+            );
+        }
+
+        if ("serviceWorker" in navigator) {
+            await Promise.all(
+                (await navigator.serviceWorker.getRegistrations()).map((registration) =>
+                    registration.unregister()
+                )
+            );
+        }
+
+        try {
+            localStorage.clear();
+            sessionStorage.clear();
+        } catch {
+            // Storage can be unavailable in private browsing contexts.
+        }
+
+        const url = new URL(window.location.href);
+        url.searchParams.set("refresh", Date.now().toString());
+        window.location.assign(url);
+    });
+</script>
