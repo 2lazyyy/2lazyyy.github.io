@@ -21,6 +21,7 @@ I am running adguard home, so I will go to my DNS rewrites to set the domain to 
 Leaving all of it aside here I managed to configure the homelab.lan domain:
 
 ![](../assets/images/image-26.png)
+
 ![](../assets/images/image-27.png)
 
 We'll add a proxy host by going to our nginx instence and `Hosts -> Proxy Hosts` 

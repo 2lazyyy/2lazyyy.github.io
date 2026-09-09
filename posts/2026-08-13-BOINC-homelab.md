@@ -8,6 +8,7 @@ tags: [Homelabbing, Hardware, Proxmox, Self Hosting, Hosting, Cloud Free]
 I have read [this](https://medium.com/@RadX/power-in-numbers-how-distributed-computing-helps-fight-cancer-7044bdb2708f) great article on distributed computing and how can it help in cancer research, and I decided it wouldn't hurt participating for the greater cause so I followed the steps below of setting it up.
 
 ![](../assets/images/image-13.png)
+
 ![](../assets/images/image-14.png)
 
 I decided to create a virtual machine with a minimal ubuntu server instence.
@@ -28,6 +29,7 @@ hostname -I
 ```
 
 ![](../assets/images/image-17.png)
+
 ![](../assets/images/image-18.png)
 
 I encountered some problems setting up the software following the **World Community Grid** debian installation page.
@@ -52,6 +54,7 @@ boinc@boinc:~$ boinccmd --project_attach http://www.worldcommunitygrid.org ACCOU
 ```
 
 ![](../assets/images/image-19.png)
+
 ![](../assets/images/image-20.png)
 
 that's it! See ya.

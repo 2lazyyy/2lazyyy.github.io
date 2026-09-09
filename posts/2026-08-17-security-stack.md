@@ -75,6 +75,7 @@ scrape_configs:
 did a docker restart, went to grafana and verfied if it works and it did! Now i just had to configure it.
 
 ![](../assets/images/image-35.png)
+
 ![](../assets/images/image-36.png)
 
 

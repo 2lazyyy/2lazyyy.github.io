@@ -10,7 +10,9 @@ Hi. Today we are going to set up tailscale on a tailnet network to be able to ma
 For this we are going to create a LXC container as it's much resource friendly and we don't need a dedicated machine for a lightweight service like tailscale.
 
 ![](../assets/images/image-21.png)
+
 ![](../assets/images/image-22.png)
+
 ![](../assets/images/image-23.png)
 
 Let's set set this container to have a static IP for reliability and in case anything goes wrong.
