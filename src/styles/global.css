@@ -293,6 +293,10 @@ body::before {
   height: auto;
 }
 
+.prose p:has(> img:only-child) + p:has(> img:only-child) {
+  margin-top: 1.5rem;
+}
+
 .prose table {
   display: block;
   max-width: 100%;
