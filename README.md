@@ -44,3 +44,12 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## GitHub Pages deployment
+
+The static site uses Supabase from the browser, so the GitHub Pages build needs these repository secrets:
+
+- `PUBLIC_SUPABASE_URL`: the Supabase project URL
+- `PUBLIC_SUPABASE_ANON_KEY`: the Supabase anon/publishable key
+
+Add them under **Settings > Secrets and variables > Actions**. Do not use a Supabase service-role key; it must never be sent to the browser.

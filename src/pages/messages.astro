@@ -15,14 +15,20 @@ import BaseLayout from "../layouts/Base.astro";
 <script>
   import { createClient } from "@supabase/supabase-js";
 
-  const supabase = createClient(
-    import.meta.env.PUBLIC_SUPABASE_URL,
-    import.meta.env.PUBLIC_SUPABASE_ANON_KEY,
-  );
+  const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+  const supabase = supabaseUrl && supabaseAnonKey
+    ? createClient(supabaseUrl, supabaseAnonKey)
+    : null;
   const messageList = document.querySelector<HTMLUListElement>("#messages-list");
   const messageStatus = document.querySelector<HTMLParagraphElement>("#messages-status");
 
   const loadMessages = async () => {
+    if (!supabase) {
+      if (messageStatus) messageStatus.textContent = "Messages are unavailable right now.";
+      return;
+    }
+
     const { data, error } = await supabase
       .from("comments")
       .select("name, message, created_at")
