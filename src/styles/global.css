@@ -273,6 +273,36 @@ body::before {
   outline-offset: 2px;
 }
 
+.prose {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.prose pre {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.prose img,
+.prose video,
+.prose iframe {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.prose a {
+  overflow-wrap: anywhere;
+}
+
 .recent-posts time {
   grid-column: 3;
   grid-row: 1;
